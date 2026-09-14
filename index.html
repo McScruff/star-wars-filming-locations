@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Nearest Filming Locations — A Galaxy Far, Far Away</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="That Place In Space">
+<meta name="mobile-web-app-capable" content="yes">
+
+<style>
+  :root {
+    --sand: #f4e9d0;
+    --ink: #000000;
+    --panel: #10131e;
+    --gold: #ffe81f;
+    --gold-dim: #cbb61c;
+    --rust: #c1502e;
+    --rust-light: #e07a52;
+    --teal: #4ac3d6;
+    --text-dim: #8b93a8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--ink);
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 25% 60%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 40% 25%, #fff, transparent),
+      radial-gradient(1px 1px at 55% 80%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 70% 40%, #fff, transparent),
+      radial-gradient(1px 1px at 85% 65%, #fff, transparent),
+      radial-gradient(1px 1px at 92% 20%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 15% 85%, #fff, transparent),
+      radial-gradient(1px 1px at 65% 10%, #fff, transparent),
+      radial-gradient(1px 1px at 35% 45%, #fff, transparent);
+    background-repeat: repeat;
+    background-size: 400px 400px;
+    color: var(--sand);
+    min-height: 100vh;
+  }
+  header {
+    padding: 0 0 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,232,31,0.15);
+  }
+  .banner {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 1.25rem;
+  }
+  header p {
+    margin: 0 auto;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 34em;
+    text-align: left;
+    padding: 0 1.25rem;
+  }
+  header p + p { margin-top: 0.9em; }
+  main {
+    padding: 1.25rem;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .gallery {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1.1rem;
+    background: var(--ink);
+    border: 1px solid rgba(255,232,31,0.15);
+  }
+  .gallery img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .gallery img.show { opacity: 1; }
+  .gallery-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.6rem 0.75rem 1.4rem;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.85));
+    color: var(--sand);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .gallery-caption span {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--gold);
+    margin-top: 0.1rem;
+  }
+  .gallery-dots {
+    position: absolute;
+    bottom: 0.45rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.3rem;
+  }
+  .gallery-dots span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    transition: background 0.3s ease;
+  }
+  .gallery-dots span.active { background: var(--gold); }
+  #locate-btn {
+    width: 100%;
+    padding: 0.95rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: #05070d;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 0 16px rgba(255,232,31,0.25);
+  }
+  #locate-btn:hover { background: #fff04d; }
+  #locate-btn:active { transform: scale(0.98); }
+  #locate-btn:disabled {
+    background: #3a3d33;
+    color: var(--text-dim);
+    box-shadow: none;
+    cursor: default;
+  }
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 0;
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,232,31,0.15);
+  }
+  .manual-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .manual-row input {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    background: var(--panel);
+    border: 1px solid rgba(255,232,31,0.2);
+    border-radius: 6px;
+    color: var(--sand);
+  }
+  .manual-row input::placeholder { color: var(--text-dim); }
+  #manual-btn {
+    padding: 0.75rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    background: var(--teal);
+    color: #05070d;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  #manual-btn:active { transform: scale(0.97); }
+  #status {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    min-height: 1.2rem;
+    margin-bottom: 1.25rem;
+    text-align: center;
+  }
+  #status.error { color: var(--rust-light); }
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid rgba(255,232,31,0.12);
+    border-left: 2px solid var(--gold-dim);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .thumb {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+    background: var(--ink);
+  }
+  .card-row {
+    padding: 0.9rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    cursor: pointer;
+  }
+  .card.noimg .card-row { padding-top: 0.9rem; }
+  .card-row::after {
+    content: '';
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--text-dim);
+    border-bottom: 2px solid var(--text-dim);
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+    margin-left: 0.15rem;
+  }
+  .card.expanded .card-row::after { transform: rotate(-135deg); }
+  .card-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .card.expanded .card-details { max-height: 600px; }
+  .mini-gallery {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0 1rem 0.75rem;
+    overflow-x: auto;
+  }
+  .mini-gallery img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,232,31,0.15);
+    cursor: pointer;
+  }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(2,3,7,0.94);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox.hidden { display: none; }
+  .lightbox img {
+    max-width: 88vw;
+    max-height: 78vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 0 40px rgba(255,232,31,0.12);
+  }
+  .lb-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.1rem;
+    background: none;
+    border: none;
+    color: var(--sand);
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+  }
+  .lb-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,232,31,0.1);
+    border: 1px solid rgba(255,232,31,0.3);
+    color: var(--gold);
+    font-size: 1.8rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .lb-prev { left: 0.75rem; }
+  .lb-next { right: 0.75rem; }
+  .lb-counter {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+  .detail-body {
+    padding: 0 1rem 1rem;
+    border-top: 1px solid rgba(255,232,31,0.1);
+    padding-top: 0.75rem;
+  }
+  .note-full {
+    font-size: 0.85rem;
+    color: var(--sand);
+    line-height: 1.5;
+    margin: 0 0 0.7rem;
+  }
+  .detail-row {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .detail-row span {
+    color: var(--teal);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .rank {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,232,31,0.1);
+    border: 1px solid rgba(255,232,31,0.3);
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .info { flex: 1; min-width: 0; }
+  .info .name {
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--sand);
+    margin: 0 0 0.15rem;
+  }
+  .info .meta {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin: 0 0 0.15rem;
+    line-height: 1.4;
+  }
+  .info .dist {
+    font-size: 0.78rem;
+    color: var(--teal);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .w3w-btn {
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--gold);
+    background: rgba(255,232,31,0.08);
+    border: 1px solid rgba(255,232,31,0.25);
+    border-radius: 5px;
+    padding: 0.2rem 0.5rem;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .cross-link {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.76rem;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .cross-link:active { opacity: 0.7; }
+  .card:target {
+    border-left-color: var(--gold);
+    box-shadow: 0 0 0 1px rgba(255,232,31,0.4);
+  }
+  .dir-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background: rgba(74,195,214,0.12);
+    border: 1px solid rgba(74,195,214,0.3);
+    text-decoration: none;
+    color: var(--teal);
+    font-size: 1.2rem;
+  }
+  .dir-btn:active { transform: scale(0.95); }
+  #placeholder {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    padding: 2.5rem 1rem;
+    border: 1px dashed rgba(255,232,31,0.2);
+    border-radius: 8px;
+  }
+  footer {
+    text-align: center;
+    padding: 1.5rem 1rem 2rem;
+    font-size: 0.72rem;
+    color: rgba(139,147,168,0.6);
+    letter-spacing: 0.02em;
+  }
+  footer p {
+    margin: 0 auto;
+    max-width: 34em;
+  }
+  footer p + p {
+    margin-top: 0.6em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img class="banner" src="assets/images/banner.jpg" alt="That Place In Space">
+  <p>There are 30+ Countries that have been used to bring a galaxy far, far away to life.</p>
+  <p>Myself and like-minded others, have sought to assist travellers to take their first steps into a larger world and get to those filming locations.</p>
+  <p>This app aims to help you locate those sites and find for yourself &ldquo;That Place in Space&rdquo;.</p>
+</header>
+
+<main>
+  <div class="gallery" id="gallery">
+    <img id="gallery-img" src="" alt="">
+    <div class="gallery-caption" id="gallery-caption"></div>
+    <div class="gallery-dots" id="gallery-dots"></div>
+  </div>
+
+  <button id="locate-btn">Find my location</button>
+  <div class="divider">or search by name</div>
+  <div class="manual-row">
+    <input type="text" id="manual-input" placeholder="City name, or lat,lng">
+    <button id="manual-btn">Find</button>
+  </div>
+  <div id="status"></div>
+  <div id="results">
+    <div id="placeholder">Find your location to reveal the nearest filming sites.</div>
+  </div>
+</main>
+
+<div class="lightbox hidden" id="lightbox">
+  <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+  <button class="lb-arrow lb-prev" id="lb-prev" aria-label="Previous photo">&#8249;</button>
+  <img id="lb-img" src="" alt="">
+  <button class="lb-arrow lb-next" id="lb-next" aria-label="Next photo">&#8250;</button>
+  <div class="lb-counter" id="lb-counter"></div>
+</div>
+
+<footer>
+  <p>Coordinates are approximate, sourced from public location guides. Distances are straight-line.</p>
+  <p>That Place In Space is an independent, fan-made platform created for entertainment purposes. It is not sponsored, endorsed, or affiliated with Lucasfilm Ltd., The Walt Disney Company, or any of their subsidiaries or affiliates. All Star Wars trademarks, logos, and images are the property of their respective owners.</p>
+</footer>
+
+<script>
+  var GALLERY = [
+    { image: "assets/images/Tatooine/tatooine-1-site.png", name: "Chott el Djerid", tag: "Tatooine · A New Hope" },
+    { image: "assets/images/gallery/jellys-hollow.jpg", name: "Jellys Hollow", tag: "Kenari · Andor S1" },
+    { image: "assets/images/gallery/scarif-canary-wharf.jpg", name: "Canary Wharf, Jubilee Station", tag: "Scarif · Rogue One" },
+    { image: "assets/images/gallery/guildhall.jpg", name: "Guildhall", tag: "Ghorman · Andor S2" },
+    { image: "assets/images/gallery/naboo-plaza-de-espana.jpg", name: "Plaza de España, Seville", tag: "Naboo · Attack of the Clones" },
+    { image: "assets/images/gallery/naboo-lake-como.jpg", name: "Villa del Balbianello, Lake Como", tag: "Naboo · Attack of the Clones" },
+    { image: "assets/images/gallery/naboo-caserta-palace.jpg", name: "Caserta Palace", tag: "Naboo · The Phantom Menace" },
+    { image: "assets/images/gallery/puzzlewood.jpg", name: "Puzzlewood", tag: "Takodana · The Force Awakens" }
+  ];
+
+  (function initGallery() {
+    var imgEl = document.getElementById('gallery-img');
+    var captionEl = document.getElementById('gallery-caption');
+    var dotsEl = document.getElementById('gallery-dots');
+    var idx = 0;
+
+    GALLERY.forEach(function(_, i) {
+      var dot = document.createElement('span');
+      if (i === 0) dot.className = 'active';
+      dotsEl.appendChild(dot);
+    });
+
+    function show(i) {
+      var item = GALLERY[i];
+      imgEl.classList.remove('show');
+      var loader = new Image();
+      loader.onload = function() {
+        imgEl.src = item.image;
+        requestAnimationFrame(function() { imgEl.classList.add('show'); });
+      };
+      loader.onerror = function() {
+        // skip broken image, try the next one shortly
+        idx = (idx + 1) % GALLERY.length;
+        show(idx);
+      };
+      loader.src = item.image;
+      captionEl.innerHTML = item.name + '<span>' + item.tag + '</span>';
+      Array.prototype.forEach.call(dotsEl.children, function(d, di) {
+        d.className = di === i ? 'active' : '';
+      });
+    }
+
+    show(idx);
+    setInterval(function() {
+      idx = (idx + 1) % GALLERY.length;
+      show(idx);
+    }, 3500);
+  })();
+
+  // data/locations.json is the source of truth for locations — edit that
+  // file to add or update entries. FALLBACK_LOCATIONS below only kicks in
+  // if the fetch fails (offline, opened from disk, etc). Point DATA_URL at
+  // a hosted endpoint later and nothing else needs to change.
+  var DATA_URL = './data/locations.json';
+
+  function fivePlaceholder(url) {
+    return url ? [url, url, url, url, url] : [];
+  }
+
+  var FALLBACK_LOCATIONS = [
+    { id: "hever-tpm", name: "Hever Castle — The Loggia", region: "Edenbridge, UK", planet: "Naboo", show: "The Phantom Menace", note: "Deleted scene No. 1 — the waterfall sequence. The Jedi and Jar Jar Binks walk up the left side of the steps; the upper skyline is a digital recreation.", lat: 51.187213786639845, lng: 0.1188302424904595, w3w: "mixed.closer.pushy", access: "Unknown", linkTo: "hever-andor", image: "assets/images/Naboo/hever-tpm-film.jpg", images: ["assets/images/Naboo/hever-tpm-film.jpg", "assets/images/Naboo/hever-tpm-bts.jpg"] },
+    { id: "hever-andor", name: "Hever Castle — The Loggia", region: "Edenbridge, UK", planet: "Naboo", show: "Andor S2E10", note: "Revisited for Andor, again standing in for Naboo in a flashback. Filmed in the north colonnade, flanked by a plaza and the Nymphs Fountain (built 1908).", lat: 51.187213786639845, lng: 0.1188302424904595, w3w: "shot.divisions.vows", access: "Unknown", linkTo: "hever-tpm", image: "assets/images/Naboo/hever-andor-1-film.jpg", images: ["assets/images/Naboo/hever-andor-1-film.jpg", "assets/images/Naboo/hever-andor-1-bts.jpg", "assets/images/Naboo/hever-andor-2-film.jpg", "assets/images/Naboo/hever-andor-2-bts.jpg", "assets/images/Naboo/hever-andor-3-film.jpg", "assets/images/Naboo/hever-andor-3-bts.jpg", "assets/images/Naboo/hever-andor-4-film.jpg", "assets/images/Naboo/hever-andor-4-bts.jpg"] },
+    { id: "kenari", name: "Jellys Hollow", region: "Guildford, UK", planet: "Kenari", show: "Andor S1E02", note: "Establishing shot of Kenari, midway along Winterfold Heath Road.", lat: 51.17286654242129, lng: -0.4747647781980439, w3w: "framework.position.locator", access: "Unknown", image: "assets/images/Kenari/kenari-1-film.jpg", images: ["assets/images/Kenari/kenari-1-film.jpg", "assets/images/Kenari/kenari-1-bts.jpg", "assets/images/Kenari/kenari-2-film.jpg", "assets/images/Kenari/kenari-2-bts.jpg"] },
+    { id: "scarif", name: "Canary Wharf, Jubilee Station", region: "London, UK", planet: "Scarif", show: "Rogue One", note: "Imperial base of Scarif in the climactic third-act battle scenes.", lat: 51.50327910077205, lng: -0.01688688520943481, w3w: "active.yard.loaf", access: "Unknown", image: "assets/images/Scarif/scarif-1-film.jpg", images: ["assets/images/Scarif/scarif-1-film.jpg", "assets/images/Scarif/scarif-2-bts.jpg", "assets/images/Scarif/scarif-3-film.jpg", "assets/images/Scarif/scarif-4-bts.jpg", "assets/images/Scarif/scarif-5-film.jpg", "assets/images/Scarif/scarif-6-bts.jpg", "assets/images/Scarif/scarif-7-bts-press.jpg", "assets/images/Scarif/scarif-8-bts.jpg"] },
+    { id: "coruscant", name: "Adams Plaza Bridge", region: "Canary Wharf, London, UK", planet: "Coruscant", show: "Andor S1E04 & others", note: "ISB headquarters entrance — Dedra Meero walking to a briefing.", lat: 51.50596456658342, lng: -0.019165422416289764, w3w: "bells.magma.call", access: "Unknown", image: "assets/images/Coruscant/coruscant-1-film.jpg", images: ["assets/images/Coruscant/coruscant-1-film.jpg", "assets/images/Coruscant/coruscant-2-bts-press.jpg", "assets/images/Coruscant/coruscant-3-bts.jpg"] },
+    { id: "morlana", name: "Portland House", region: "Aldermaston, Reading, UK", planet: "Morlana One", show: "Andor S1E01/02", note: "Corporate security HQ where we first meet Syril Karn's superior.", lat: 51.38000643826416, lng: -1.1467162307405585, w3w: "traps.roadshow.developed", access: "Unknown", image: "assets/images/Morlana/morlana-1-aerial.jpg", images: ["assets/images/Morlana/morlana-1-aerial.jpg", "assets/images/Morlana/morlana-2-film.jpg", "assets/images/Morlana/morlana-3-film.jpg", "assets/images/Morlana/morlana-4-building.jpg", "assets/images/Morlana/morlana-5-building.jpg", "assets/images/Morlana/morlana-6-building.jpg"] },
+    { id: "tatooine", name: "Chott el Djerid", region: "Tunisia", planet: "Tatooine", show: "A New Hope", note: "The Lars homestead — where we first meet Luke Skywalker in 1977.", lat: 33.842870302521774, lng: 7.779035748416805, w3w: "backflips.trained.beak", access: "Unknown", image: "assets/images/Tatooine/tatooine-1-site.png", images: ["assets/images/Tatooine/tatooine-1-site.png", "assets/images/Tatooine/tatooine-2-site.jpg", "assets/images/Tatooine/tatooine-3-site.png", "assets/images/Tatooine/tatooine-4-film.jpg", "assets/images/Tatooine/tatooine-5-film.jpg", "assets/images/Tatooine/tatooine-6-film.jpg", "assets/images/Tatooine/tatooine-7-film.jpg"] }
+  ];
+
+  var LOCATIONS = FALLBACK_LOCATIONS;
+
+  function loadLocations() {
+    if (!DATA_URL) return Promise.resolve(FALLBACK_LOCATIONS);
+    return fetch(DATA_URL)
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        return (Array.isArray(data) && data.length) ? data : FALLBACK_LOCATIONS;
+      })
+      .catch(function() { return FALLBACK_LOCATIONS; });
+  }
+
+  loadLocations().then(function(data) {
+    data.forEach(function(loc) {
+      if (!loc.images || !loc.images.length) loc.images = fivePlaceholder(loc.image);
+    });
+    LOCATIONS = data;
+  });
+
+  function haversine(lat1, lon1, lat2, lon2) {
+    var R = 3958.8;
+    var dLat = (lat2 - lat1) * Math.PI / 180;
+    var dLon = (lon2 - lon1) * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+
+  var btn = document.getElementById('locate-btn');
+  var status = document.getElementById('status');
+  var results = document.getElementById('results');
+  var manualBtn = document.getElementById('manual-btn');
+  var manualInput = document.getElementById('manual-input');
+
+  // Lightbox
+  var lightbox = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-img');
+  var lbCounter = document.getElementById('lb-counter');
+  var lbImages = [];
+  var lbIndex = 0;
+
+  function openLightbox(images, index) {
+    lbImages = images;
+    lbIndex = index;
+    updateLightbox();
+    lightbox.classList.remove('hidden');
+  }
+  function updateLightbox() {
+    lbImg.src = lbImages[lbIndex];
+    lbCounter.textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+  }
+  function closeLightbox() { lightbox.classList.add('hidden'); }
+  function lbPrev() { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; updateLightbox(); }
+  function lbNext() { lbIndex = (lbIndex + 1) % lbImages.length; updateLightbox(); }
+
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', lbPrev);
+  document.getElementById('lb-next').addEventListener('click', lbNext);
+  lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', function(e) {
+    if (lightbox.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbPrev();
+    if (e.key === 'ArrowRight') lbNext();
+  });
+
+  results.addEventListener('click', function(e) {
+    var thumb = e.target.closest('.mini-gallery img');
+    if (!thumb) return;
+    e.stopPropagation();
+    var galleryId = thumb.getAttribute('data-gallery-id');
+    var idx = parseInt(thumb.getAttribute('data-index'), 10);
+    var loc = LOCATIONS.find(function(l) { return l.id === galleryId; });
+    if (loc && loc.images && loc.images.length) openLightbox(loc.images, idx);
+  });
+
+  manualBtn.addEventListener('click', handleManual);
+  manualInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleManual();
+  });
+
+  function handleManual() {
+    var val = manualInput.value.trim();
+    if (!val) {
+      status.className = 'error';
+      status.textContent = 'Enter a city name or coordinates first.';
+      return;
+    }
+
+    var coordMatch = val.match(/^\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*$/);
+    if (coordMatch) {
+      var lat = parseFloat(coordMatch[1]);
+      var lng = parseFloat(coordMatch[3]);
+      renderResults(lat, lng);
+      status.className = '';
+      status.textContent = 'Showing distances from ' + lat.toFixed(2) + ', ' + lng.toFixed(2) + '.';
+      return;
+    }
+
+    manualBtn.disabled = true;
+    manualBtn.textContent = '...';
+    status.className = '';
+    status.textContent = 'Finding "' + val + '"...';
+
+    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(val))
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        manualBtn.disabled = false;
+        manualBtn.textContent = 'Find';
+        if (!data || data.length === 0) {
+          status.className = 'error';
+          status.textContent = 'Could not find that place. Try a different name or use lat,lng.';
+          return;
+        }
+        var lat = parseFloat(data[0].lat);
+        var lng = parseFloat(data[0].lon);
+        renderResults(lat, lng);
+        status.className = '';
+        status.textContent = 'Showing distances from ' + (data[0].display_name || val) + '.';
+      })
+      .catch(function() {
+        manualBtn.disabled = false;
+        manualBtn.textContent = 'Find';
+        status.className = 'error';
+        status.textContent = 'Lookup failed. Check your connection and try again, or use lat,lng.';
+      });
+  }
+
+  btn.addEventListener('click', function() {
+    if (!navigator.geolocation) {
+      status.textContent = "Geolocation isn't supported in this browser.";
+      status.className = 'error';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Finding...';
+    status.textContent = '';
+    status.className = '';
+
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        var lat = pos.coords.latitude;
+        var lng = pos.coords.longitude;
+        renderResults(lat, lng);
+        btn.disabled = false;
+        btn.textContent = 'Find my location again';
+        status.textContent = 'Showing distances from your current location.';
+      },
+      function(err) {
+        btn.disabled = false;
+        btn.textContent = 'Find my location';
+        status.className = 'error';
+        if (err.code === err.PERMISSION_DENIED) {
+          status.textContent = 'Location permission denied. Enable it in your browser settings and try again.';
+        } else {
+          status.textContent = 'Could not get your location. Please try again.';
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  });
+
+  function renderResults(userLat, userLng) {
+    var withDist = LOCATIONS.map(function(loc) {
+      return Object.assign({}, loc, {
+        dist: haversine(userLat, userLng, loc.lat, loc.lng)
+      });
+    });
+    withDist.sort(function(a, b) { return a.dist - b.dist; });
+    var top10 = withDist.slice(0, 10);
+
+    var byId = {};
+    top10.forEach(function(loc) { byId[loc.id] = loc; });
+
+    var html = '<div class="list">';
+    top10.forEach(function(loc, i) {
+      var mapsUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + userLat + ',' + userLng +
+                    '&destination=' + loc.lat + ',' + loc.lng;
+      var distText = loc.dist < 100 ? loc.dist.toFixed(1) + ' mi' : Math.round(loc.dist).toLocaleString() + ' mi';
+      var planetShow = (loc.planet && loc.planet !== '—' ? loc.planet + ' — ' : '') + (loc.show || '');
+      var w3wLink = loc.w3w ? '<a class="w3w-btn" href="https://what3words.com/' + loc.w3w + '" target="_blank" rel="noopener">///' + loc.w3w + '</a>' : '';
+      var linkNote = '';
+      if (loc.linkTo && byId[loc.linkTo]) {
+        linkNote = '<a class="cross-link" href="#' + loc.linkTo + '" onclick="event.stopPropagation()">Same spot, also filmed for ' + byId[loc.linkTo].show + ' →</a>';
+      }
+      var photo = loc.image
+        ? '<img class="thumb" src="' + loc.image + '" alt="' + loc.name + '" loading="lazy" onerror="this.parentElement.classList.add(&#39;noimg&#39;); this.remove();">'
+        : '';
+
+      var miniGallery = '';
+      if (loc.images && loc.images.length) {
+        miniGallery = '<div class="mini-gallery">' + loc.images.map(function(src, gi) {
+          return '<img src="' + src + '" alt="' + loc.name + ' photo ' + (gi + 1) + '" loading="lazy" data-gallery-id="' + loc.id + '" data-index="' + gi + '" onerror="this.style.display=\'none\'">';
+        }).join('') + '</div>';
+      }
+
+      var detailRows = ''
+        + (loc.planet && loc.planet !== '—' ? '<div class="detail-row"><span>Planet</span>' + loc.planet + '</div>' : '')
+        + (loc.show ? '<div class="detail-row"><span>Show / Film</span>' + loc.show + '</div>' : '')
+        + '<div class="detail-row"><span>Region</span>' + loc.region + '</div>'
+        + '<div class="detail-row"><span>Coordinates</span>' + loc.lat.toFixed(5) + ', ' + loc.lng.toFixed(5) + '</div>'
+        + (loc.access ? '<div class="detail-row"><span>Access</span>' + loc.access + '</div>' : '');
+
+      html += '<div class="card' + (loc.image ? '' : ' noimg') + '" id="' + loc.id + '">' +
+        photo +
+        '<div class="card-row" onclick="this.closest(\'.card\').classList.toggle(\'expanded\')">' +
+          '<div class="rank">' + (i + 1) + '</div>' +
+          '<div class="info">' +
+            '<p class="name">' + loc.name + '</p>' +
+            '<p class="meta">' + loc.region + (planetShow ? ' · ' + planetShow : '') + '</p>' +
+            '<p class="dist">' + distText + ' away</p>' +
+          '</div>' +
+          '<a class="dir-btn" href="' + mapsUrl + '" target="_blank" rel="noopener" aria-label="Get directions to ' + loc.name + '" onclick="event.stopPropagation()">➜</a>' +
+        '</div>' +
+        '<div class="card-details">' +
+          miniGallery +
+          '<div class="detail-body">' +
+            '<p class="note-full">' + loc.note + '</p>' +
+            detailRows +
+            w3wLink +
+            linkNote +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+    results.innerHTML = html;
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js').catch(function() {});
+    });
+  }
+</script>
+
+</body>
+</html>

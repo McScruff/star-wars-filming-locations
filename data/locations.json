@@ -1,0 +1,147 @@
+[
+  {
+    "id": "hever-tpm",
+    "name": "Hever Castle — The Loggia",
+    "region": "Edenbridge, UK",
+    "planet": "Naboo",
+    "show": "The Phantom Menace",
+    "note": "Deleted scene No. 1 — the waterfall sequence. The Jedi and Jar Jar Binks walk up the left side of the steps; the upper skyline is a digital recreation.",
+    "lat": 51.187213786639845,
+    "lng": 0.1188302424904595,
+    "w3w": "mixed.closer.pushy",
+    "access": "Unknown",
+    "linkTo": "hever-andor",
+    "image": "assets/images/Naboo/hever-tpm-film.jpg",
+    "images": [
+      "assets/images/Naboo/hever-tpm-film.jpg",
+      "assets/images/Naboo/hever-tpm-bts.jpg"
+    ]
+  },
+  {
+    "id": "hever-andor",
+    "name": "Hever Castle — The Loggia",
+    "region": "Edenbridge, UK",
+    "planet": "Naboo",
+    "show": "Andor S2E10",
+    "note": "Revisited for Andor, again standing in for Naboo in a flashback. Filmed in the north colonnade, flanked by a plaza and the Nymphs Fountain (built 1908).",
+    "lat": 51.187213786639845,
+    "lng": 0.1188302424904595,
+    "w3w": "shot.divisions.vows",
+    "access": "Unknown",
+    "linkTo": "hever-tpm",
+    "image": "assets/images/Naboo/hever-andor-1-film.jpg",
+    "images": [
+      "assets/images/Naboo/hever-andor-1-film.jpg",
+      "assets/images/Naboo/hever-andor-1-bts.jpg",
+      "assets/images/Naboo/hever-andor-2-film.jpg",
+      "assets/images/Naboo/hever-andor-2-bts.jpg",
+      "assets/images/Naboo/hever-andor-3-film.jpg",
+      "assets/images/Naboo/hever-andor-3-bts.jpg",
+      "assets/images/Naboo/hever-andor-4-film.jpg",
+      "assets/images/Naboo/hever-andor-4-bts.jpg"
+    ]
+  },
+  {
+    "id": "kenari",
+    "name": "Jellys Hollow",
+    "region": "Guildford, UK",
+    "planet": "Kenari",
+    "show": "Andor S1E02",
+    "note": "Establishing shot of Kenari, midway along Winterfold Heath Road.",
+    "lat": 51.17286654242129,
+    "lng": -0.4747647781980439,
+    "w3w": "framework.position.locator",
+    "access": "Unknown",
+    "image": "assets/images/Kenari/kenari-1-film.jpg",
+    "images": [
+      "assets/images/Kenari/kenari-1-film.jpg",
+      "assets/images/Kenari/kenari-1-bts.jpg",
+      "assets/images/Kenari/kenari-2-film.jpg",
+      "assets/images/Kenari/kenari-2-bts.jpg"
+    ]
+  },
+  {
+    "id": "scarif",
+    "name": "Canary Wharf, Jubilee Station",
+    "region": "London, UK",
+    "planet": "Scarif",
+    "show": "Rogue One",
+    "note": "Imperial base of Scarif in the climactic third-act battle scenes.",
+    "lat": 51.50327910077205,
+    "lng": -0.01688688520943481,
+    "w3w": "active.yard.loaf",
+    "access": "Unknown",
+    "image": "assets/images/Scarif/scarif-1-film.jpg",
+    "images": [
+      "assets/images/Scarif/scarif-1-film.jpg",
+      "assets/images/Scarif/scarif-2-bts.jpg",
+      "assets/images/Scarif/scarif-3-film.jpg",
+      "assets/images/Scarif/scarif-4-bts.jpg",
+      "assets/images/Scarif/scarif-5-film.jpg",
+      "assets/images/Scarif/scarif-6-bts.jpg",
+      "assets/images/Scarif/scarif-7-bts-press.jpg",
+      "assets/images/Scarif/scarif-8-bts.jpg"
+    ]
+  },
+  {
+    "id": "coruscant",
+    "name": "Adams Plaza Bridge",
+    "region": "Canary Wharf, London, UK",
+    "planet": "Coruscant",
+    "show": "Andor S1E04 & others",
+    "note": "ISB headquarters entrance — Dedra Meero walking to a briefing.",
+    "lat": 51.50596456658342,
+    "lng": -0.019165422416289764,
+    "w3w": "bells.magma.call",
+    "access": "Unknown",
+    "image": "assets/images/Coruscant/coruscant-1-film.jpg",
+    "images": [
+      "assets/images/Coruscant/coruscant-1-film.jpg",
+      "assets/images/Coruscant/coruscant-2-bts-press.jpg",
+      "assets/images/Coruscant/coruscant-3-bts.jpg"
+    ]
+  },
+  {
+    "id": "morlana",
+    "name": "Portland House",
+    "region": "Aldermaston, Reading, UK",
+    "planet": "Morlana One",
+    "show": "Andor S1E01/02",
+    "note": "Corporate security HQ where we first meet Syril Karn's superior.",
+    "lat": 51.38000643826416,
+    "lng": -1.1467162307405585,
+    "w3w": "traps.roadshow.developed",
+    "access": "Unknown",
+    "image": "assets/images/Morlana/morlana-1-aerial.jpg",
+    "images": [
+      "assets/images/Morlana/morlana-1-aerial.jpg",
+      "assets/images/Morlana/morlana-2-film.jpg",
+      "assets/images/Morlana/morlana-3-film.jpg",
+      "assets/images/Morlana/morlana-4-building.jpg",
+      "assets/images/Morlana/morlana-5-building.jpg",
+      "assets/images/Morlana/morlana-6-building.jpg"
+    ]
+  },
+  {
+    "id": "tatooine",
+    "name": "Chott el Djerid",
+    "region": "Tunisia",
+    "planet": "Tatooine",
+    "show": "A New Hope",
+    "note": "The Lars homestead — where we first meet Luke Skywalker in 1977.",
+    "lat": 33.842870302521774,
+    "lng": 7.779035748416805,
+    "w3w": "backflips.trained.beak",
+    "access": "Unknown",
+    "image": "assets/images/Tatooine/tatooine-1-site.png",
+    "images": [
+      "assets/images/Tatooine/tatooine-1-site.png",
+      "assets/images/Tatooine/tatooine-2-site.jpg",
+      "assets/images/Tatooine/tatooine-3-site.png",
+      "assets/images/Tatooine/tatooine-4-film.jpg",
+      "assets/images/Tatooine/tatooine-5-film.jpg",
+      "assets/images/Tatooine/tatooine-6-film.jpg",
+      "assets/images/Tatooine/tatooine-7-film.jpg"
+    ]
+  }
+]
